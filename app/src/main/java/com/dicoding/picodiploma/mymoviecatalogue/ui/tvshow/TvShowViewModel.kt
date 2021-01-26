@@ -5,5 +5,5 @@ import com.dicoding.picodiploma.mymoviecatalogue.data.MovieEntity
 import com.dicoding.picodiploma.mymoviecatalogue.utils.DataDummy
 
 class TvShowViewModel : ViewModel() {
-    fun getMoviesList(): List<MovieEntity> = DataDummy.generateDummyTvShows()
+    fun getTvShowsList(): List<MovieEntity> = DataDummy.generateDummyTvShows()
 }

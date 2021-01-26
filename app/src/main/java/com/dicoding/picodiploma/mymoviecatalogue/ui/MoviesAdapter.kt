@@ -16,8 +16,8 @@ import com.dicoding.picodiploma.mymoviecatalogue.ui.detail.DetailActivity
 class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
     private var listMovies = ArrayList<MovieEntity>()
-    fun setMovies(movies: List<MovieEntity>?){
-        if(movies == null) return
+    fun setMovies(movies: List<MovieEntity>?) {
+        if (movies == null) return
         this.listMovies.clear()
         this.listMovies.addAll(movies)
     }
@@ -51,7 +51,8 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
         parent: ViewGroup,
         viewType: Int
     ): MoviesAdapter.MoviesViewHolder {
-        val itemsMovieBinding = ItemsMoviesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemsMovieBinding =
+            ItemsMoviesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MoviesAdapter.MoviesViewHolder(itemsMovieBinding)
     }
 

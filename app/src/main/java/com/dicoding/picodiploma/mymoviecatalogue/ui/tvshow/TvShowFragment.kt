@@ -27,12 +27,12 @@ class TvShowFragment : Fragment() {
                 this,
                 ViewModelProvider.NewInstanceFactory()
             )[TvShowViewModel::class.java]
-            val movies = viewModel.getMoviesList()
+            val movies = viewModel.getTvShowsList()
 
             val movieAdapter = MoviesAdapter()
             movieAdapter.setMovies(movies)
 
-            with(fragmentTvShowBinding.recyclerView) {
+            with(fragmentTvShowBinding.rvTvshows) {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
                 adapter = movieAdapter
