@@ -1,34 +1,18 @@
 package com.dicoding.picodiploma.mymoviecatalogue.ui.detail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.dicoding.picodiploma.mymoviecatalogue.data.MovieEntity
-import com.dicoding.picodiploma.mymoviecatalogue.utils.DataDummy
+import com.dicoding.picodiploma.mymoviecatalogue.data.repositories.CatalogueRepository
+import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.MovieResponse
+import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.TvResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class DetailViewModel : ViewModel() {
-    private lateinit var movieId: String
-    fun setMovieList(movieId: String) {
-        this.movieId = movieId
-    }
+@HiltViewModel
+class DetailViewModel @Inject constructor(private val catalogueRepository: CatalogueRepository) : ViewModel() {
 
-    fun getMoviesList(): MovieEntity {
-        lateinit var movie: MovieEntity
-        val movieEntities = DataDummy.generateDummyMovies()
-        for (movieEntity in movieEntities) {
-            if (movieEntity.movieId == movieId) {
-                movie = movieEntity
-            }
-        }
-        return movie
-    }
+    fun getDetailMovie(movieId: Int) : LiveData<MovieResponse> = catalogueRepository.getMovieDetail(movieId)
 
-    fun getTvList(): MovieEntity {
-        lateinit var movie: MovieEntity
-        val movieEntities = DataDummy.generateDummyTvShows()
-        for (movieEntity in movieEntities) {
-            if (movieEntity.movieId == movieId) {
-                movie = movieEntity
-            }
-        }
-        return movie
-    }
+    fun getDetailTv(tvId: Int) : LiveData<TvResponse> = catalogueRepository.getTvShowDetail(tvId)
+
 }

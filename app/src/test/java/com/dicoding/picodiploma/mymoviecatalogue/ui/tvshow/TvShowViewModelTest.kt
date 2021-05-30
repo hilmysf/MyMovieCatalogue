@@ -9,7 +9,7 @@ class TvShowViewModelTest {
     private lateinit var viewModel: TvShowViewModel
 
     @Before
-    fun setUp(){
+    fun setUp() {
         viewModel = TvShowViewModel()
     }
 

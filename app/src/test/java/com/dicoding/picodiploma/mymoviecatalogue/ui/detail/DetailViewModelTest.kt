@@ -14,7 +14,7 @@ class DetailViewModelTest {
     private val movieIdT = dummyTvShow.movieId
 
     @Before
-    fun setUp(){
+    fun setUp() {
         viewModel = DetailViewModel()
         viewModel.setMovieList(movieIdM)
         viewModel.setMovieList(movieIdT)
