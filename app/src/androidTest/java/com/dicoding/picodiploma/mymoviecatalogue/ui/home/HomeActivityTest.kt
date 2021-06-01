@@ -3,22 +3,36 @@ package com.dicoding.picodiploma.mymoviecatalogue.ui.home
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.rule.ActivityTestRule
 import com.dicoding.picodiploma.mymoviecatalogue.R
 import com.dicoding.picodiploma.mymoviecatalogue.utils.DataDummy
+import com.dicoding.picodiploma.mymoviecatalogue.utils.EspressoIdlingResource
+import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class HomeActivityTest {
     private val dummyMovie = DataDummy.generateDummyMovies()
-    private val dummyTvShow = DataDummy.generateDummyTvShows()
+    private val dummyTvShow = DataDummy.generateDummyTv()
+
+    @get:Rule
+    var activityRule = ActivityTestRule(HomeActivity::class.java)
 
     @Before
     fun setUp() {
         ActivityScenario.launch(HomeActivity::class.java)
+        IdlingRegistry.getInstance().register((EspressoIdlingResource.getEspressoIdlingResource()))
+    }
+
+    @After
+    fun tearDown(){
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.getEspressoIdlingResource())
     }
 
     @Test
@@ -41,17 +55,11 @@ class HomeActivityTest {
             )
         )
         onView(withId(R.id.tv_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_title)).check(matches(withText(dummyMovie[random].title)))
         onView(withId(R.id.tv_release_date)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_release_date)).check(matches(withText(dummyMovie[random].releaseDate)))
         onView(withId(R.id.tv_genre)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_genre)).check(matches(withText(dummyMovie[random].genre)))
         onView(withId(R.id.tv_score)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_score)).check(matches(withText(dummyMovie[random].score)))
         onView(withId(R.id.tv_creator_name)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_creator_name)).check(matches(withText(dummyMovie[random].creator)))
         onView(withId(R.id.tv_overview_content)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_overview_content)).check(matches(withText(dummyMovie[random].overview)))
     }
 
     @Test
@@ -76,16 +84,10 @@ class HomeActivityTest {
             )
         )
         onView(withId(R.id.tv_title)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_title)).check(matches(withText(dummyTvShow[random].title)))
         onView(withId(R.id.tv_release_date)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_release_date)).check(matches(withText(dummyTvShow[random].releaseDate)))
         onView(withId(R.id.tv_genre)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_genre)).check(matches(withText(dummyTvShow[random].genre)))
         onView(withId(R.id.tv_score)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_score)).check(matches(withText(dummyTvShow[random].score)))
         onView(withId(R.id.tv_creator_name)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_creator_name)).check(matches(withText(dummyTvShow[random].creator)))
         onView(withId(R.id.tv_overview_content)).check(matches(isDisplayed()))
-        onView(withId(R.id.tv_overview_content)).check(matches(withText(dummyTvShow[random].overview)))
     }
 }

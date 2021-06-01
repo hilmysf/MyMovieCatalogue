@@ -7,15 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.MovieResponse
+import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.TvResponse
 import com.dicoding.picodiploma.mymoviecatalogue.databinding.FragmentTvShowBinding
-import com.dicoding.picodiploma.mymoviecatalogue.ui.MoviesAdapter
-import com.dicoding.picodiploma.mymoviecatalogue.ui.TvAdapter
-import com.dicoding.picodiploma.mymoviecatalogue.ui.ViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_movie.*
 
 @AndroidEntryPoint
 class TvShowFragment : Fragment() {
@@ -32,23 +29,33 @@ class TvShowFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (activity != null) {
-//            val factory = ViewModelFactory.getInstance(requireActivity())
-//            val viewModel = ViewModelProvider(
-//                this,
-//                factory
-//            )[TvShowViewModel::class.java]
+        getTvShowsData()
+    }
 
+    private fun getTvShowsData(){
+        if (activity != null) {
             val tvAdapter = TvAdapter()
-            viewModel.getPopularTv.observe(viewLifecycleOwner, Observer {
+            showLoading(true)
+            viewModel.getPopularTv().observe(viewLifecycleOwner, Observer {
                 tv = it
                 tvAdapter.setTv(tv)
+                tvAdapter.notifyDataSetChanged()
+                showLoading(false)
             })
             with(fragmentTvShowBinding.rvTvshows) {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
+                adapter?.stateRestorationPolicy =
+                    RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 adapter = tvAdapter
             }
+        }
+    }
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.GONE
         }
     }
 }

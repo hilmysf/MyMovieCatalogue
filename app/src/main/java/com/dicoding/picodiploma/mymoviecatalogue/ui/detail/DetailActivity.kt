@@ -1,27 +1,25 @@
 package com.dicoding.picodiploma.mymoviecatalogue.ui.detail
 
 import android.content.Intent
-import android.graphics.BlurMaskFilter
 import android.graphics.text.LineBreaker
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.picodiploma.mymoviecatalogue.R
-import com.dicoding.picodiploma.mymoviecatalogue.data.MovieEntity
 import com.dicoding.picodiploma.mymoviecatalogue.databinding.ActivityDetailBinding
-import com.dicoding.picodiploma.mymoviecatalogue.ui.ViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_movie.*
 
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
     private lateinit var detailBinding: ActivityDetailBinding
     private val viewModel: DetailViewModel by viewModels()
+
     companion object {
         var EXTRA_TITLE = "extra_title"
         var EXTRA_ID = "extra_id"
@@ -32,7 +30,6 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         detailBinding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(detailBinding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val title = intent.getStringExtra(EXTRA_TITLE)
         val movieId = intent.getIntExtra(EXTRA_ID, 0)
         val type = intent.getStringExtra(EXTRA_TYPE)
@@ -42,20 +39,13 @@ class DetailActivity : AppCompatActivity() {
             detailBinding.tvOverviewContent.justificationMode =
                 LineBreaker.JUSTIFICATION_MODE_INTER_WORD
         }
-
-//        val factory = ViewModelFactory.getInstance(this)
-//        viewModel = ViewModelProvider(
-//            this,
-//            factory
-//        )[DetailViewModel::class.java]
-
         if (title != null) {
-                if (type.equals("movie")) {
-                    showMovieDetail(movieId)
-                }
-                if (type.equals("tv")) {
-                    showTvDetail(movieId)
-                }
+            if (type.equals("movie")) {
+                showMovieDetail(movieId)
+            }
+            if (type.equals("tv")) {
+                showTvDetail(movieId)
+            }
         }
         shareButtonAction()
     }
@@ -72,6 +62,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun showMovieDetail(movieId: Int) {
+        showLoading(true)
         viewModel.getDetailMovie(movieId).observe(this, Observer {
             Glide.with(applicationContext)
                 .load("https://image.tmdb.org/t/p/w500${it.posterPath}")
@@ -90,9 +81,11 @@ class DetailActivity : AppCompatActivity() {
                 .error(R.drawable.ic_baseline_broken_image_24)
                 .into(detailBinding.imgBackground)
         })
+        showLoading(false)
     }
 
     private fun showTvDetail(tvId: Int) {
+        showLoading(true)
         viewModel.getDetailTv(tvId).observe(this, Observer {
             Glide.with(applicationContext)
                 .load("https://image.tmdb.org/t/p/w500${it.posterPath}")
@@ -111,5 +104,13 @@ class DetailActivity : AppCompatActivity() {
                 .error(R.drawable.ic_baseline_broken_image_24)
                 .into(detailBinding.imgBackground)
         })
+        showLoading(false)
+    }
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.GONE
+        }
     }
 }

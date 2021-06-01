@@ -5,8 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ApiConfig {
-    companion object {
+object ApiConfig {
         private const val url = "https://api.themoviedb.org/3/"
         fun getApiService(): MovieApiService {
             val loggingIterceptor =
@@ -24,4 +23,3 @@ class ApiConfig {
             return retrofit.create(MovieApiService::class.java)
         }
     }
-}

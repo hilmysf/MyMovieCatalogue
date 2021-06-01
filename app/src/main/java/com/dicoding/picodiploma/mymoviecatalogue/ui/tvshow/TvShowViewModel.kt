@@ -5,10 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.dicoding.picodiploma.mymoviecatalogue.data.repositories.CatalogueRepository
 import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.TvResponse
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class TvShowViewModel @Inject constructor(private val catalogueRepository: CatalogueRepository) : ViewModel() {
-    val getPopularTv: LiveData<List<TvResponse>> = catalogueRepository.getPopularTvShow()
-   }
+class TvShowViewModel @ViewModelInject constructor(private val catalogueRepository: CatalogueRepository) :
+    ViewModel() {
+    fun getPopularTv(): LiveData<List<TvResponse>> = catalogueRepository.getPopularTvShow()
+}

@@ -1,36 +1,26 @@
 package com.dicoding.picodiploma.mymoviecatalogue.data.source.remote
 
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.dicoding.picodiploma.mymoviecatalogue.data.MovieEntity
 import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.*
 import com.dicoding.picodiploma.mymoviecatalogue.utils.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 
-class RemoteDataSource(apiConfig: ApiConfig) {
-    private val handler = Handler()
-    private val apiConfig = ApiConfig
+class RemoteDataSource @Inject constructor(private val apiService: MovieApiService) {
+    private val handler = Handler(Looper.getMainLooper())
+
     companion object {
         private const val TAG = "RemoteRepository"
         private const val TIME_IN_MILLIS: Long = 1500
-        private var INSTANCE: RemoteDataSource? = null
-        fun getInstance(apiConfig: ApiConfig): RemoteDataSource{
-            if (INSTANCE == null)
-                INSTANCE = RemoteDataSource(apiConfig)
-            return  INSTANCE!!
-        }
     }
-
-    private val movies: MutableLiveData<List<MovieEntity>> = MutableLiveData()
-    private val tv: MutableLiveData<List<MovieEntity>> = MutableLiveData()
-
 
     fun getPopularMovies(callback: LoadPopoularMoviesCallback) {
         EspressoIdlingResource.increment()
         handler.postDelayed({
-            ApiConfig.getApiService().getMoviePopular().enqueue(object : retrofit2.Callback<PopularMovieResponse> {
+            apiService.getMoviePopular().enqueue(object : retrofit2.Callback<PopularMovieResponse> {
                 override fun onResponse(
                     call: Call<PopularMovieResponse>,
                     response: Response<PopularMovieResponse>
@@ -47,10 +37,10 @@ class RemoteDataSource(apiConfig: ApiConfig) {
         }, TIME_IN_MILLIS)
     }
 
-    fun getPopularTv(callback: LoadPopoularTvCallback){
+    fun getPopularTv(callback: LoadPopoularTvCallback) {
         EspressoIdlingResource.increment()
         handler.postDelayed({
-            ApiConfig.getApiService().getTvPopular().enqueue(object : retrofit2.Callback<PopularTvResponse> {
+            apiService.getTvPopular().enqueue(object : retrofit2.Callback<PopularTvResponse> {
 
                 override fun onResponse(
                     call: Call<PopularTvResponse>,
@@ -68,10 +58,10 @@ class RemoteDataSource(apiConfig: ApiConfig) {
         }, TIME_IN_MILLIS)
     }
 
-    fun getDetailMovie(movieId: Int, callback: LoadDetailMovieCallback){
+    fun getDetailMovie(movieId: Int, callback: LoadDetailMovieCallback) {
         EspressoIdlingResource.increment()
         handler.postDelayed({
-            ApiConfig.getApiService().getMovieDetail(movieId).enqueue(object: retrofit2.Callback<MovieResponse>{
+            apiService.getMovieDetail(movieId).enqueue(object : retrofit2.Callback<MovieResponse> {
                 override fun onResponse(
                     call: Call<MovieResponse>,
                     response: Response<MovieResponse>
@@ -88,10 +78,10 @@ class RemoteDataSource(apiConfig: ApiConfig) {
         }, TIME_IN_MILLIS)
     }
 
-    fun getDetailTv(tvId: Int, callback: LoadDetaiTvCallback){
+    fun getDetailTv(tvId: Int, callback: LoadDetaiTvCallback) {
         EspressoIdlingResource.increment()
         handler.postDelayed({
-            ApiConfig.getApiService().getTvShowDetail(tvId).enqueue(object: retrofit2.Callback<TvResponse>{
+            apiService.getTvShowDetail(tvId).enqueue(object : retrofit2.Callback<TvResponse> {
                 override fun onResponse(
                     call: Call<TvResponse>,
                     response: Response<TvResponse>
@@ -119,6 +109,7 @@ class RemoteDataSource(apiConfig: ApiConfig) {
     interface LoadDetailMovieCallback {
         fun onDetailMovieReceived(contentResponse: MovieResponse)
     }
+
     interface LoadDetaiTvCallback {
         fun onDetailTvReceived(contentResponse: TvResponse)
     }

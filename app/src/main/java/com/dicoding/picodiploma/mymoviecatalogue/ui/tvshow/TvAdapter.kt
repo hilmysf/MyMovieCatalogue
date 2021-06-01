@@ -1,4 +1,4 @@
-package com.dicoding.picodiploma.mymoviecatalogue.ui
+package com.dicoding.picodiploma.mymoviecatalogue.ui.tvshow
 
 import android.content.Intent
 import android.graphics.text.LineBreaker
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.picodiploma.mymoviecatalogue.R
-import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.MovieResponse
 import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.TvResponse
 import com.dicoding.picodiploma.mymoviecatalogue.databinding.ItemsMoviesBinding
 import com.dicoding.picodiploma.mymoviecatalogue.ui.detail.DetailActivity
