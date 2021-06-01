@@ -40,6 +40,7 @@ class DetailActivity : AppCompatActivity() {
                 LineBreaker.JUSTIFICATION_MODE_INTER_WORD
         }
         if (title != null) {
+            showLoading(true)
             if (type.equals("movie")) {
                 showMovieDetail(movieId)
             }
@@ -62,7 +63,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun showMovieDetail(movieId: Int) {
-        showLoading(true)
         viewModel.getDetailMovie(movieId).observe(this, Observer {
             Glide.with(applicationContext)
                 .load("https://image.tmdb.org/t/p/w500${it.posterPath}")
@@ -85,7 +85,6 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun showTvDetail(tvId: Int) {
-        showLoading(true)
         viewModel.getDetailTv(tvId).observe(this, Observer {
             Glide.with(applicationContext)
                 .load("https://image.tmdb.org/t/p/w500${it.posterPath}")

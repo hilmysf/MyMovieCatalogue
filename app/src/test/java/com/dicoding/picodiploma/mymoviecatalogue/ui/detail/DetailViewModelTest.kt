@@ -3,13 +3,10 @@ package com.dicoding.picodiploma.mymoviecatalogue.ui.detail
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.dicoding.picodiploma.mymoviecatalogue.data.entities.MovieEntity
 import com.dicoding.picodiploma.mymoviecatalogue.data.repositories.CatalogueRepository
 import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.MovieResponse
 import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.TvResponse
 import com.dicoding.picodiploma.mymoviecatalogue.utils.DataDummy
-import org.junit.Assert
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
@@ -25,8 +22,8 @@ import org.mockito.junit.MockitoJUnitRunner
 class DetailViewModelTest {
     private lateinit var viewModel: DetailViewModel
 
-    val dummyMovie = DataDummy.generateDummyDetailMovie()
-    val dummyTvShow = DataDummy.generateDummyDetailTv()
+    private val dummyMovie = DataDummy.generateDummyDetailMovie()
+    private val dummyTvShow = DataDummy.generateDummyDetailTv()
     private val movieId = dummyMovie.movieId
     private val tvId = dummyTvShow.tvId
 

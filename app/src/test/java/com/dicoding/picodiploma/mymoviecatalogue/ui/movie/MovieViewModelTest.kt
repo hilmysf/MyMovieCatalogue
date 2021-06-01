@@ -20,7 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class MovieViewModelTest {
     private lateinit var viewModel: MovieViewModel
-    val dummyMovie = DataDummy.generateDummyMovies()
+    private val dummyMovie = DataDummy.generateDummyMovies()
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()

@@ -11,7 +11,7 @@ import java.io.InputStream
 
 object DataDummy {
 
-    private val TAG = "DataDummy"
+    private const val TAG = "DataDummy"
     private var gson = Gson()
 
     fun generateDummyMovies() =
