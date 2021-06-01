@@ -1,0 +1,53 @@
+Menampilkan data list movie
+
+- Memastikan rv_movies berhasil ditampilkan
+
+- Gulir rv_movies ke posisi data paling akhir
+
+
+
+Menampilkan data detail movie
+
+- Memberikan aksi berupa klik kepada data random (indeks 0-9) di rv_movies
+
+- Gulir rv_movies ke posisi data ke-random
+
+- Memastikan TextView untuk tv_title tampil
+
+- Memastikan TextView untuk tv_release_date tampil
+
+- Memastikan TextView untuk tv_genre tampil
+
+- Memastikan TextView untuk tv_score tampil
+
+- Memastikan TextView untuk tv_creator_name tampil
+
+- Memastikan TextView untuk tv_overview_content tampil
+
+
+
+Menampilkan data list tv show
+
+- Menekan tab "TV SHOWS"
+
+- Memastikan rv_tvshows berhasil ditampilkan
+
+- Gulir rv_tvshows ke posisi data paling akhir
+
+
+
+Menampilkan data detail movie
+
+- Memberikan aksi berupa klik kepada data random (indeks 0-9) di rv_tvshows
+
+- Memastikan TextView untuk tv_title tampil
+
+- Memastikan TextView untuk tv_release_date tampil
+
+- Memastikan TextView untuk tv_genre tampil
+
+- Memastikan TextView untuk tv_score tampil
+
+- Memastikan TextView untuk tv_creator_name tampil
+
+- Memastikan TextView untuk tv_overview_content tampil
