@@ -1,53 +1,58 @@
 package com.dicoding.picodiploma.mymoviecatalogue.data.repositories
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import com.dicoding.picodiploma.mymoviecatalogue.data.source.local.LocalDataSource
+import com.dicoding.picodiploma.mymoviecatalogue.data.source.local.entities.MovieEntity
+import com.dicoding.picodiploma.mymoviecatalogue.data.source.local.entities.TvShowEntity
 import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.RemoteDataSource
-import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.MovieResponse
-import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.TvResponse
+import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.*
+import com.dicoding.picodiploma.mymoviecatalogue.vo.Resource
 import javax.inject.Inject
 
-class CatalogueRepository @Inject constructor(private val remoteDataSource: RemoteDataSource) :
+class CatalogueRepository @Inject constructor(
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource
+) :
     CatalogueDataSource {
 
-    override fun getPopularMovies(): LiveData<List<MovieResponse>> {
-        val movieLists = MutableLiveData<List<MovieResponse>>()
-        remoteDataSource.getPopularMovies(object : RemoteDataSource.LoadPopoularMoviesCallback {
-            override fun onPopularMoviesReceived(movieResponse: List<MovieResponse>) {
-                movieLists.postValue(movieResponse)
-            }
 
-        })
-        return movieLists
+    override fun getPopularMovies(): LiveData<Resource<List<MovieEntity>>> = remoteDataSource.getPopularMovies()
+
+    override fun getMovieDetail(movieId: Int?): LiveData<Resource<MovieResponse>> = remoteDataSource.getDetailMovie(movieId)
+
+    override fun getPopularTvShow(): LiveData<Resource<List<TvShowEntity>>> = remoteDataSource.getPopularTv()
+
+    override fun getTvShowDetail(tvShowId: Int?): LiveData<Resource<TvResponse>> = remoteDataSource.getDetailTvShow(tvShowId)
+
+    override fun getFavMovies(): LiveData<PagedList<MovieEntity>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(5)
+            .setPageSize(5)
+            .build()
+        return LivePagedListBuilder(localDataSource.getFavMovies(), config).build()
     }
 
-    override fun getMovieDetail(movieId: Int): LiveData<MovieResponse> {
-        val movieDetail = MutableLiveData<MovieResponse>()
-        remoteDataSource.getDetailMovie(movieId, object : RemoteDataSource.LoadDetailMovieCallback {
-            override fun onDetailMovieReceived(contentResponse: MovieResponse) {
-                movieDetail.postValue(contentResponse)
-            }
-        })
-        return movieDetail
+    override fun getFavTvShows(): LiveData<PagedList<TvShowEntity>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(5)
+            .setPageSize(5)
+            .build()
+        return LivePagedListBuilder(localDataSource.getFavTvShows(), config).build()
     }
 
-    override fun getPopularTvShow(): LiveData<List<TvResponse>> {
-        val tvLists = MutableLiveData<List<TvResponse>>()
-        remoteDataSource.getPopularTv(object : RemoteDataSource.LoadPopoularTvCallback {
-            override fun onPopoularTvReceived(tvResponse: List<TvResponse>) {
-                tvLists.postValue(tvResponse)
-            }
-        })
-        return tvLists
-    }
+    override suspend fun insertFavMovie(movie: MovieEntity) = localDataSource.insertFavMovie(movie)
 
-    override fun getTvShowDetail(tvShowId: Int): LiveData<TvResponse> {
-        val tvDetail = MutableLiveData<TvResponse>()
-        remoteDataSource.getDetailTv(tvShowId, object : RemoteDataSource.LoadDetaiTvCallback {
-            override fun onDetailTvReceived(contentResponse: TvResponse) {
-                tvDetail.postValue(contentResponse)
-            }
-        })
-        return tvDetail
-    }
+    override suspend fun insertFavTvShow(tvShow: TvShowEntity) = localDataSource.insertFavTvShow(tvShow)
+
+    override suspend fun deleteFavMovie(movie: MovieEntity) = localDataSource.deleteFavMovie(movie)
+
+    override suspend fun deleteFavTvShow(tvShow: TvShowEntity) = localDataSource.deleteFavTvShow(tvShow)
+
+    override suspend fun isFavoritedMovie(movie: MovieEntity?): Boolean = localDataSource.getFavMovieById(movie)
+
+    override suspend fun isFavoritedTvShow(tvShow: TvShowEntity?): Boolean = localDataSource.getFavTvShowById(tvShow)
 }

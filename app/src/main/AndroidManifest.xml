@@ -3,6 +3,7 @@
     package="com.dicoding.picodiploma.mymoviecatalogue">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".di.MyApplication"
         android:allowBackup="true"
@@ -12,8 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMovieCatalogue">
-        <activity android:name="com.dicoding.picodiploma.mymoviecatalogue.ui.detail.DetailActivity" />
-        <activity android:name="com.dicoding.picodiploma.mymoviecatalogue.ui.home.HomeActivity">
+        <activity android:name=".ui.favorite.FavoriteActivity"/>
+        <activity android:name=".ui.detail.DetailActivity" />
+        <activity android:name=".ui.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

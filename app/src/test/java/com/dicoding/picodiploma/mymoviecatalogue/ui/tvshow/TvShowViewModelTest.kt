@@ -2,11 +2,11 @@ package com.dicoding.picodiploma.mymoviecatalogue.ui.tvshow
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.dicoding.picodiploma.mymoviecatalogue.data.repositories.CatalogueRepository
-import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.TvResponse
+import com.dicoding.picodiploma.mymoviecatalogue.data.source.local.entities.TvShowEntity
 import com.dicoding.picodiploma.mymoviecatalogue.utils.DataDummy
-import com.nhaarman.mockitokotlin2.verify
+import com.dicoding.picodiploma.mymoviecatalogue.vo.Resource
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
@@ -28,24 +28,19 @@ class TvShowViewModelTest {
     @Mock
     private lateinit var catalogueRepository: CatalogueRepository
 
-    @Mock
-    private lateinit var tvObserver: Observer<List<TvResponse>>
-
-
     @Before
     fun setUp() {
         viewModel = TvShowViewModel(catalogueRepository)
     }
 
     @Test
-    fun getPopularTv(){
-        val tv = MutableLiveData<List<TvResponse>>()
-        tv.postValue(dummyTv)
-        Mockito.`when`(catalogueRepository.getPopularTvShow()).thenReturn(tv)
-        val tvLists = viewModel.getPopularTv().value
-        verify(catalogueRepository).getPopularTvShow()
-        assertNotNull(tvLists)
-        viewModel.getPopularTv().observeForever(tvObserver)
-        Mockito.verify(tvObserver).onChanged(dummyTv)
+    fun getPopularTv() {
+        val tvShowList = MutableLiveData<Resource<List<TvShowEntity>>>()
+        Mockito.`when`(viewModel.getPopularTv()).thenReturn(tvShowList)
+        catalogueRepository.getPopularTvShow()
+
+        val tvShowEntities = Resource.success(DataDummy.generateDummyTv())
+        assertNotNull(tvShowEntities.body)
+        assertEquals(dummyTv.size.toLong(), tvShowEntities.body?.size?.toLong())
     }
 }

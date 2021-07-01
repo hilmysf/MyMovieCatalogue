@@ -2,6 +2,8 @@
     <string name="app_name">Movie Catalogue</string>
     <string name="movies">MOVIES</string>
     <string name="tvShows">TV SHOWS</string>
+    <string name="movies_favorite">MY MOVIES</string>
+    <string name="tvShows_favorite">MY TV SHOWS</string>
     <string name="release_date">Release Date</string>
     <string name="overview">Overview</string>
     <string name="title">Title</string>
@@ -12,4 +14,11 @@
     <string name="creator_title">Creator</string>
     <string name="genre">Genre</string>
     <string name="score">Score</string>
+    <string name="content_description_background">Movie/Tv Show Detail Background</string>
+    <string name="movie_tv_show_poster">Movie/Tv Show Poster</string>
+    <string name="favorite_menu">Favorite</string>
+    <string name="add_favorite">Added to favorite</string>
+    <string name="delete_favorite">Deleted from favorite</string>
+    <string name="share_button">Share Button</string>
+    <string name="floating_add_button">Floating Add Button</string>
 </resources>

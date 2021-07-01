@@ -11,13 +11,13 @@ interface MovieApiService {
 
     @GET("movie/{movie_id}")
     fun getMovieDetail(
-        @Path("movie_id") id: Int,
+        @Path("movie_id") id: Int?,
         @Query("api_key") apiKey: String = API_KEY
     ): Call<MovieResponse>
 
     @GET("tv/{tv_id}")
     fun getTvShowDetail(
-        @Path("tv_id") id: Int,
+        @Path("tv_id") id: Int?,
         @Query("api_key") apiKey: String = API_KEY
     ): Call<TvResponse>
 

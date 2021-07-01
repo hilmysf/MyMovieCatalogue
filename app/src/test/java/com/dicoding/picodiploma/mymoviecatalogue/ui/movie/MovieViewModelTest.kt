@@ -2,11 +2,11 @@ package com.dicoding.picodiploma.mymoviecatalogue.ui.movie
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.dicoding.picodiploma.mymoviecatalogue.data.repositories.CatalogueRepository
-import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.MovieResponse
+import com.dicoding.picodiploma.mymoviecatalogue.data.source.local.entities.MovieEntity
 import com.dicoding.picodiploma.mymoviecatalogue.utils.DataDummy
-import com.nhaarman.mockitokotlin2.verify
+import com.dicoding.picodiploma.mymoviecatalogue.vo.Resource
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
@@ -28,10 +28,6 @@ class MovieViewModelTest {
     @Mock
     private lateinit var catalogueRepository: CatalogueRepository
 
-    @Mock
-    private lateinit var movieObserver: Observer<List<MovieResponse>>
-
-
     @Before
     fun setUp() {
         viewModel = MovieViewModel(catalogueRepository)
@@ -39,24 +35,12 @@ class MovieViewModelTest {
 
     @Test
     fun getPopularMovies(){
-        val movies = MutableLiveData<List<MovieResponse>>()
-        movies.postValue(dummyMovie)
-        Mockito.`when`(catalogueRepository.getPopularMovies()).thenReturn(movies)
-        val movieLists = viewModel.getPopularMovie().value
-        verify(catalogueRepository).getPopularMovies()
-        assertNotNull(movieLists)
-        viewModel.getPopularMovie().observeForever(movieObserver)
-        Mockito.verify(movieObserver).onChanged(dummyMovie)
+        val moviesList = MutableLiveData<Resource<List<MovieEntity>>>()
+        Mockito.`when`(viewModel.getPopularMovie()).thenReturn(moviesList)
+        catalogueRepository.getPopularMovies()
+
+        val movieEntities = Resource.success(DataDummy.generateDummyMovies())
+        assertNotNull(movieEntities.body)
+        assertEquals(dummyMovie.size.toLong(), movieEntities.body?.size?.toLong())
     }
-//    @Before
-//    fun setUp() {
-//        viewModel = MovieViewModel()
-//    }
-//
-//    @Test
-//    fun testGetMoviesList() {
-//        val movieEntities = viewModel.getMoviesList()
-//        assertNotNull(movieEntities)
-//        assertEquals(10, movieEntities.size)
-//    }
 }

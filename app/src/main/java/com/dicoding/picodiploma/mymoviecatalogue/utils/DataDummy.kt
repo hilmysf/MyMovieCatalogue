@@ -29,7 +29,7 @@ object DataDummy {
     private fun parsingFileToString(fileName: String): String? {
         var json: String? = null
         try {
-            val input: InputStream = this.javaClass.classLoader!!.getResourceAsStream(fileName)
+            val input: InputStream = this.javaClass.classLoader.getResourceAsStream(fileName)
             val size = input.available()
             val buffer = ByteArray(size)
 

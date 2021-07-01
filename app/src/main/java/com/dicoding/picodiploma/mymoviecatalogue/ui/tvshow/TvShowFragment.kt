@@ -5,57 +5,63 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dicoding.picodiploma.mymoviecatalogue.data.source.remote.response.TvResponse
 import com.dicoding.picodiploma.mymoviecatalogue.databinding.FragmentTvShowBinding
+import com.dicoding.picodiploma.mymoviecatalogue.vo.Status
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_movie.*
 
 @AndroidEntryPoint
 class TvShowFragment : Fragment() {
     private lateinit var fragmentTvShowBinding: FragmentTvShowBinding
-    private var tv = listOf<TvResponse>()
     private val viewModel: TvShowViewModel by viewModels()
+    private lateinit var tvAdapter: TvAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         fragmentTvShowBinding = FragmentTvShowBinding.inflate(layoutInflater, container, false)
         return fragmentTvShowBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tvAdapter = TvAdapter()
         getTvShowsData()
     }
 
-    private fun getTvShowsData(){
-        if (activity != null) {
-            val tvAdapter = TvAdapter()
-            showLoading(true)
-            viewModel.getPopularTv().observe(viewLifecycleOwner, Observer {
-                tv = it
-                tvAdapter.setTv(tv)
-                tvAdapter.notifyDataSetChanged()
-                showLoading(false)
-            })
-            with(fragmentTvShowBinding.rvTvshows) {
-                layoutManager = LinearLayoutManager(context)
-                setHasFixedSize(true)
-                adapter?.stateRestorationPolicy =
-                    RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-                adapter = tvAdapter
+    private fun getTvShowsData() {
+        viewModel.getPopularTv().observe(viewLifecycleOwner, {
+            when (it.status) {
+                Status.LOADING -> showLoading(true)
+                Status.SUCCESS -> {
+                    showLoading(false)
+                    tvAdapter.setTv(it.body)
+                    tvAdapter.notifyDataSetChanged()
+                }
+                Status.ERROR -> {
+                    showLoading(false)
+                    Toast.makeText(requireContext(), "Terjadi Kesalahan", Toast.LENGTH_SHORT).show()
+                }
             }
+
+        })
+        with(fragmentTvShowBinding.rvTvshows) {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter?.stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            adapter = tvAdapter
         }
     }
+
     private fun showLoading(state: Boolean) {
         if (state) {
-            progressBar.visibility = View.VISIBLE
+            fragmentTvShowBinding.progressBar.visibility = View.VISIBLE
         } else {
-            progressBar.visibility = View.GONE
+            fragmentTvShowBinding.progressBar.visibility = View.GONE
         }
     }
 }
